@@ -1,0 +1,161 @@
+/* Only opt-in resident editor roots, never the rest of the application. */
+[data-lmm-native] { color-scheme: inherit; position: relative; }
+/* Only inactive, complete fence lines leave normal flow. Their source remains
+   in the native DOM, positioned at a real body caret with normal font metrics. */
+[data-lmm-native] [data-lmm-fence-line] {
+  position: absolute; width: 0; margin: 0; padding: 0; border: 0;
+  left: var(--lmm-fence-left); top: var(--lmm-fence-top);
+  white-space: pre; pointer-events: none;
+}
+[data-lmm-native] br[data-lmm-fence-break="true"] { display: none; }
+/* The theme's separately measured caret can lag behind IME and preview layout.
+   Let the browser paint the caret in this editor. Other fields keep the theme's
+   animated caret, including fields that share an already positioned wrapper. */
+body[data-dsh-claude-style] [data-lmm-native][data-dsh-claude-caret] {
+  caret-color: var(--dsw-alias-state-business-primary, currentColor) !important;
+}
+body[data-dsh-claude-style] :has(> [data-lmm-native][data-dsh-claude-caret]) > [data-dsh-claude-caret-layer] {
+  visibility: hidden !important;
+}
+[data-lmm-native] [data-lmm-role~="strong"] { font-weight: 700; }
+[data-lmm-native] [data-lmm-role~="em"] { font-style: italic; }
+[data-lmm-native] [data-lmm-role~="strike"] { text-decoration: line-through; }
+[data-lmm-native] [data-lmm-role~="h1"] { font-size: 1.65em; font-weight: 700; line-height: 1.4; }
+[data-lmm-native] [data-lmm-role~="h2"] { font-size: 1.4em; font-weight: 700; line-height: 1.4; }
+[data-lmm-native] [data-lmm-role~="h3"] { font-size: 1.2em; font-weight: 650; }
+[data-lmm-native] [data-lmm-role~="h4"], [data-lmm-native] [data-lmm-role~="h5"], [data-lmm-native] [data-lmm-role~="h6"] { font-weight: 650; }
+[data-lmm-native] [data-lmm-role~="quote"] { color: var(--dsw-alias-label-secondary, currentColor); }
+[data-lmm-native] [data-lmm-role~="link"] { text-decoration: underline; text-underline-offset: 3px; }
+[data-lmm-native] [data-lmm-role~="code"], [data-lmm-native] [data-lmm-role~="codeblock"] {
+  font-family: ui-monospace, Consolas, monospace;
+}
+[data-lmm-native] [data-lmm-role~="code"] {
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  padding-block: 0.15em;
+  border-radius: 0;
+}
+[data-lmm-native] [data-lmm-role~="code"][data-lmm-code-start="true"] {
+  border-start-start-radius: 4px;
+  border-end-start-radius: 4px;
+}
+[data-lmm-native] [data-lmm-role~="code"][data-lmm-code-end="true"] {
+  border-start-end-radius: 4px;
+  border-end-end-radius: 4px;
+}
+[data-lmm-native] [data-lmm-role~="code"][data-lmm-hide="true"] {
+  background: none;
+  padding-block: 0;
+}
+/* The hidden source deliberately keeps its font metrics: the native caret is
+   painted with the metrics of the text it sits in, so hiding with a zero font
+   size (or a zero line-height) leaves an invisible caret exactly where the
+   caret lives — inside headings, emphasis markers and formulas. Only the
+   glyphs are transparent, and the measured --lmm-advance cancels the advance
+   so the source still takes no room; a formula reserves its own box.
+   Hiding is NOT gated on composition: reverting a rendered line to raw source
+   while an input method composes is exactly the flicker users report. The
+   transform stays paused during composition, so these attributes are simply
+   carried over from the last consistent paint. */
+[data-lmm-native] [data-lmm-hide="true"],
+[data-lmm-native] [data-lmm-math="true"] {
+  -webkit-text-fill-color: transparent;
+  letter-spacing: var(--lmm-advance, normal);
+}
+[data-lmm-native] [data-lmm-math="true"] {
+  display: inline-block; width: var(--lmm-width); height: var(--lmm-height);
+  line-height: var(--lmm-height, 1.25em); vertical-align: middle;
+}
+/* One view-only list label per recognised item: the source marker is hidden
+   above, and this glyph is painted in its place. Generated content never
+   enters the editor DOM, so Lexical and the clipboard keep the source. */
+[data-lmm-native] [data-lmm-role~="ulm"][data-lmm-hide="true"]::before,
+[data-lmm-native] [data-lmm-role~="olm"][data-lmm-hide="true"]::before {
+  -webkit-text-fill-color: currentColor; letter-spacing: normal;
+  color: var(--dsw-alias-label-secondary, currentColor);
+  content: var(--lmm-list-label, "\2022");
+}
+.lmm-native-layer { position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; color-scheme: inherit; }
+[data-lmm-native][data-lmm-code-layout="true"] {
+  box-sizing: border-box; isolation: isolate;
+  padding-left: var(--lmm-code-pad-left) !important;
+  padding-right: var(--lmm-code-pad-right) !important;
+}
+[data-lmm-native] [data-lmm-code-edge] {
+  display: inline-block; max-width: 100%; vertical-align: baseline;
+}
+[data-lmm-native] [data-lmm-code-edge~="start"] { padding-top: 12px; }
+[data-lmm-native] [data-lmm-code-edge~="end"] { padding-bottom: 12px; }
+[data-lmm-native] p[data-lmm-code-edge] {
+  display: block; max-width: none; box-sizing: border-box;
+  margin-left: -16px !important; margin-right: -16px !important; padding-left: 16px; padding-right: 16px;
+  font-family: ui-monospace, Consolas, monospace;
+}
+[data-lmm-native] p[data-lmm-code-edge],
+[data-lmm-native] [data-lmm-role~="codeblock"]:not([style*="marker-"]),
+[data-lmm-native] [style^="--lmm-native: codeblock"]:not([style*="marker-"]) {
+  color: var(--lmm-code-foreground, rgb(235 235 240));
+  caret-color: var(--lmm-code-foreground, rgb(235 235 240));
+}
+[data-lmm-native] [data-lmm-code-backdrop="true"] { position: relative; }
+[data-lmm-native] [data-lmm-code-backdrop="true"]::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: var(--lmm-code-left); top: var(--lmm-code-top);
+  width: var(--lmm-code-width); height: var(--lmm-code-height);
+  border-radius: 24px;
+  background: var(--lmm-code-background, var(--lmm-code-surface, rgb(48 48 52)));
+}
+/* Fixed rectangles measure clipping. The opaque fill stays below native text. */
+.lmm-native-layer .lmm-native-codeblock {
+  position: absolute; box-sizing: border-box; pointer-events: none;
+}
+.lmm-native-layer .lmm-native-formula { position: absolute; display: inline-block; width: max-content; max-width: none; white-space: nowrap; pointer-events: none; line-height: normal; }
+.lmm-native-layer .lmm-native-formula .katex-display { margin: 0; }
+.lmm-native-layer .lmm-native-formula .katex { font-size: 1.08em; }
+@media print {
+  .lmm-native-layer { display: none; }
+  [data-lmm-native] [data-lmm-hide], [data-lmm-native] [data-lmm-math] { -webkit-text-fill-color: currentColor !important; letter-spacing: normal !important; display: inline !important; width: auto !important; height: auto !important; line-height: inherit !important; }
+  [data-lmm-native] [data-lmm-fence-line] { position: static !important; width: auto !important; left: auto !important; top: auto !important; pointer-events: auto !important; }
+  [data-lmm-native] br[data-lmm-fence-break="true"] { display: inline !important; }
+  [data-lmm-native][data-lmm-code-layout="true"] { padding-left: calc(var(--lmm-code-pad-left) - 16px) !important; padding-right: calc(var(--lmm-code-pad-right) - 16px) !important; }
+  [data-lmm-native] [data-lmm-code-edge] { display: inline !important; padding: 0 !important; }
+  [data-lmm-native] p[data-lmm-code-edge] { display: block !important; margin-left: 0 !important; margin-right: 0 !important; }
+  [data-lmm-native] p[data-lmm-code-edge],
+  [data-lmm-native] [data-lmm-role~="codeblock"],
+  [data-lmm-native] [style^="--lmm-native: codeblock"] { color: inherit !important; }
+  [data-lmm-native] [data-lmm-code-backdrop="true"]::before { display: none !important; }
+}
+
+/* Code selects its visible glyphs. Its hidden source is kept only for restore;
+   formula source stays selectable so copying a formula still yields TeX. */
+[data-chat-flow-kind="user"] .lmm-chat-formula,
+[data-chat-flow-kind="user"] .lmm-chat-code { position: relative; display: inline-block; vertical-align: baseline; }
+[data-chat-flow-kind="user"] .lmm-chat-codeblock {
+  position: relative; display: block; min-width: 0; max-width: 100%; margin: 0.5em 0;
+}
+[data-chat-flow-kind="user"] .lmm-chat-code > code,
+[data-chat-flow-kind="user"] .lmm-chat-codeblock > pre {
+  font-family: ui-monospace, Consolas, monospace;
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 14%, transparent);
+  border-radius: 5px;
+}
+[data-chat-flow-kind="user"] .lmm-chat-code > code { padding: 0.15em 0.3em; }
+[data-chat-flow-kind="user"] .lmm-chat-codeblock > pre {
+  margin: 0; padding: 0.75em 1em; white-space: pre-wrap; overflow-wrap: anywhere;
+  border: 0; border-radius: 24px;
+  background: var(--lmm-code-background, rgb(48 48 52));
+  color: var(--lmm-code-foreground, rgb(235 235 240));
+}
+[data-chat-flow-kind="user"] .lmm-chat-codeblock > pre > code { font: inherit; white-space: inherit; }
+[data-chat-flow-kind="user"] .lmm-chat-source { position: absolute; inset: 0; color: transparent; white-space: pre; overflow: hidden; }
+[data-chat-flow-kind="user"] .lmm-chat-code,
+[data-chat-flow-kind="user"] .lmm-chat-code > code,
+[data-chat-flow-kind="user"] .lmm-chat-codeblock,
+[data-chat-flow-kind="user"] .lmm-chat-codeblock > pre,
+[data-chat-flow-kind="user"] .lmm-chat-codeblock > pre > code {
+  user-select: text; pointer-events: auto;
+}
+[data-chat-flow-kind="user"] .lmm-chat-code > .lmm-chat-source[hidden],
+[data-chat-flow-kind="user"] .lmm-chat-codeblock > .lmm-chat-source[hidden] {
+  display: none !important; user-select: none; pointer-events: none;
+}

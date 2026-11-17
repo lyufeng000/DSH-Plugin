@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Live Model Discovery",
+    "description": "Enhance native DSH model discovery with instant local catalogs, explicit live refresh, and protocol-accurate reasoning persistence."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Completion sound",
+    "description": "DS Bot lifecycle notifications with separate sounds for completed work, errors and manual stops. Configure in Settings, Completion sound."
+  }
+}

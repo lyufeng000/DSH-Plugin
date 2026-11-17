@@ -1,0 +1,22 @@
+{
+  "name": "dsh-live-model-probe",
+  "version": "0.1.0",
+  "description": "增强 DSH 原生模型列表：静态即时获取、显式在线刷新及按真实协议持久化思考能力。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": { ".": "./lib/index.js", "./client": "./lib/client.js", "./locale/*.json": "./locale/*.json", "./package.json": "./package.json" },
+  "files": ["lib", "locale/*.json", "cordis.patch.yml", "README.md"],
+  "keywords": ["dsh-plugin", "deepseek-harness", "models", "model-discovery", "live-models"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/lyufeng000/dsh-model-probe.git" },
+  "homepage": "https://github.com/lyufeng000/dsh-model-probe#readme",
+  "bugs": { "url": "https://github.com/lyufeng000/dsh-model-probe/issues" },
+  "author": "lyufeng000",
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "dsh": ">=0.2.2-rc.3 <0.3.0" },
+  "peerDependencies": { "@deepseek-ai/cordis": "^4.0.4" },
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": { "platform": "web", "inject": ["@deepseek-ai/dsh-client-connection", "@deepseek-ai/dsh-client-modules", "@deepseek-ai/dsh-client-ui-settings"] }
+  }
+}

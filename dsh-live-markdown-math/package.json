@@ -1,0 +1,86 @@
+{
+  "name": "dsh-live-markdown-math",
+  "version": "1.0.1",
+  "description": "在输入框中使用\\[\\] 或 $$闭合公式后可及时渲染数学公式，md语法可直接识别。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "locale/*.json",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "markdown",
+    "latex",
+    "katex",
+    "composer",
+    "lexical"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "pack:release": "node scripts/pack.mjs",
+    "prepublishOnly": "node scripts/pack.mjs --publish-check",
+    "test": "node --test --test-concurrency=1 test/audit.test.mjs test/native.test.mjs test/client.test.mjs test/markdown.test.mjs test/math.test.mjs test/chat-math.test.mjs test/package.test.mjs test/styles.test.mjs",
+    "check": "node scripts/check.mjs",
+    "check:browser": "node scripts/check.mjs --browser",
+    "test:legacy": "node --test --test-concurrency=1 test/bridge.test.mjs test/editor.test.mjs test/demo.test.mjs"
+  },
+  "engines": {
+    "node": ">=22",
+    "dsh": ">=0.2.1-rc.2 <0.3.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-api-session-controller"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/lang-markdown": "6.5.2",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.14",
+    "@lezer/markdown": "1.8.0",
+    "dompurify": "3.4.17",
+    "esbuild": "0.28.2",
+    "js-yaml": "4.3.2",
+    "jsdom": "30.1.3",
+    "katex": "0.19.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "author": "lyufeng000",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lyufeng000/dsh-live-markdown-math.git"
+  },
+  "homepage": "https://github.com/lyufeng000/dsh-live-markdown-math#readme",
+  "bugs": {
+    "url": "https://github.com/lyufeng000/dsh-live-markdown-math/issues"
+  }
+}
